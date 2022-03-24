@@ -2,27 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Bin&#39;s Blog</title>
-    <link>http://jaryarbn.github.io/posts/</link>
+    <link>https://jaryarbn.github.io/posts/</link>
     <description>Recent content in Posts on Bin&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-Hans</language>
-    <lastBuildDate>Thu, 24 Mar 2022 03:38:19 +0800</lastBuildDate><atom:link href="http://jaryarbn.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 24 Mar 2022 03:38:19 +0800</lastBuildDate><atom:link href="https://jaryarbn.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>写在三年后，一个普通人的碎碎念</title>
-      <link>http://jaryarbn.github.io/posts/writing-after-three-years/</link>
+      <link>https://jaryarbn.github.io/posts/writing-after-three-years/</link>
       <pubDate>Thu, 24 Mar 2022 03:38:19 +0800</pubDate>
       
-      <guid>http://jaryarbn.github.io/posts/writing-after-three-years/</guid>
-      <description>Notice：本文一共xxx字，如果您选择继续，可能会浪费您的几十分钟时间，不介意的话感谢阅读。</description>
+      <guid>https://jaryarbn.github.io/posts/writing-after-three-years/</guid>
+      <description>Notice：本文大概xxx字，如果您选择继续，可能会浪费您的几十分钟时间，感谢您的阅读。</description>
     </item>
     
     <item>
       <title>My First Post</title>
-      <link>http://jaryarbn.github.io/posts/my-first-post/</link>
+      <link>https://jaryarbn.github.io/posts/my-first-post/</link>
       <pubDate>Wed, 23 Mar 2022 22:25:36 +0800</pubDate>
       
-      <guid>http://jaryarbn.github.io/posts/my-first-post/</guid>
-      <description>大家好，这是我的第一篇博客。 </description>
+      <guid>https://jaryarbn.github.io/posts/my-first-post/</guid>
+      <description>大家好，这是我的第一篇博客。</description>
     </item>
     
   </channel>

@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://jaryarbn.github.io/sitemap.xml

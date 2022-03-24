@@ -1,21 +1,58 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<?xml-stylesheet type="text/xsl" href="https://jaryarbn.github.io/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
   <url>
-    <loc>http://jaryarbn.github.io/</loc>
-    <lastmod>2022-03-24T03:38:19+08:00</lastmod>
-  </url><url>
-    <loc>http://jaryarbn.github.io/posts/</loc>
-    <lastmod>2022-03-24T03:38:19+08:00</lastmod>
-  </url><url>
-    <loc>http://jaryarbn.github.io/posts/writing-after-three-years/</loc>
-    <lastmod>2022-03-24T03:38:19+08:00</lastmod>
-  </url><url>
-    <loc>http://jaryarbn.github.io/posts/my-first-post/</loc>
-    <lastmod>2022-03-23T22:25:36+08:00</lastmod>
-  </url><url>
-    <loc>http://jaryarbn.github.io/categories/</loc>
-  </url><url>
-    <loc>http://jaryarbn.github.io/tags/</loc>
+    <loc>https://jaryarbn.github.io/</loc>
+    <lastmod>2022-03-24T13:20:57+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
+  
+  <url>
+    <loc>https://jaryarbn.github.io/post/</loc>
+    <lastmod>2022-03-24T13:20:57+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://jaryarbn.github.io/post/test-it/</loc>
+    <lastmod>2022-03-24T13:20:57+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://jaryarbn.github.io/posts/</loc>
+    <lastmod>2022-03-24T03:38:19+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://jaryarbn.github.io/posts/writing-after-three-years/</loc>
+    <lastmod>2022-03-24T03:38:19+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://jaryarbn.github.io/posts/my-first-post/</loc>
+    <lastmod>2022-03-23T22:25:36+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://jaryarbn.github.io/categories/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://jaryarbn.github.io/tags/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
 </urlset>

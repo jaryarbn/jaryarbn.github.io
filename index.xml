@@ -6,7 +6,16 @@
     <description>Recent content on Bin&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 24 Mar 2022 13:20:57 +0800</lastBuildDate><atom:link href="https://jaryarbn.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 24 Mar 2022 17:43:05 +0800</lastBuildDate><atom:link href="https://jaryarbn.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Git从入门到进阶之本地仓库</title>
+      <link>https://jaryarbn.github.io/post/learn-git-best-1/</link>
+      <pubDate>Thu, 24 Mar 2022 17:43:05 +0800</pubDate>
+      
+      <guid>https://jaryarbn.github.io/post/learn-git-best-1/</guid>
+      <description>前情提要：本文旨在让初学者快速上手，想了解更多细节请查阅 Git官方文档 以及自行Google其他教程。 ##Git简介与安装 Git是目前世界上使</description>
+    </item>
+    
     <item>
       <title>Test It</title>
       <link>https://jaryarbn.github.io/post/test-it/</link>

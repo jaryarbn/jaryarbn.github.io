@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>My First Post - Bin&#39;s Blog</title>
+  <title>Git从入门到进阶之本地仓库 - Bin&#39;s Blog</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="Yuanbin Jiang" /><meta name="description" content="大家好，这是我的第一篇博客。" /><meta name="keywords" content="Code, Life" />
+<meta name="author" content="Yuanbin Jiang" /><meta name="description" content="前情提要：本文旨在让初学者快速上手，想了解更多细节请查阅 Git官方文档 以及自行Google其他教程。 ##Git简介与安装 Git是目前世界上使" /><meta name="keywords" content="Code, Life" />
 
 
 
@@ -26,7 +26,7 @@
 <meta name="generator" content="Hugo 0.83.1 with theme even" />
 
 
-<link rel="canonical" href="https://jaryarbn.github.io/posts/my-first-post/" />
+<link rel="canonical" href="https://jaryarbn.github.io/post/learn-git-best-1/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -39,20 +39,20 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:title" content="My First Post" />
-<meta property="og:description" content="大家好，这是我的第一篇博客。" />
+<meta property="og:title" content="Git从入门到进阶之本地仓库" />
+<meta property="og:description" content="前情提要：本文旨在让初学者快速上手，想了解更多细节请查阅 Git官方文档 以及自行Google其他教程。 ##Git简介与安装 Git是目前世界上使" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://jaryarbn.github.io/posts/my-first-post/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2022-03-23T22:25:36&#43;08:00" />
-<meta property="article:modified_time" content="2022-03-23T22:25:36&#43;08:00" />
+<meta property="og:url" content="https://jaryarbn.github.io/post/learn-git-best-1/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-03-24T17:43:05&#43;08:00" />
+<meta property="article:modified_time" content="2022-03-24T17:43:05&#43;08:00" />
 
-<meta itemprop="name" content="My First Post">
-<meta itemprop="description" content="大家好，这是我的第一篇博客。"><meta itemprop="datePublished" content="2022-03-23T22:25:36&#43;08:00" />
-<meta itemprop="dateModified" content="2022-03-23T22:25:36&#43;08:00" />
-<meta itemprop="wordCount" content="14">
+<meta itemprop="name" content="Git从入门到进阶之本地仓库">
+<meta itemprop="description" content="前情提要：本文旨在让初学者快速上手，想了解更多细节请查阅 Git官方文档 以及自行Google其他教程。 ##Git简介与安装 Git是目前世界上使"><meta itemprop="datePublished" content="2022-03-24T17:43:05&#43;08:00" />
+<meta itemprop="dateModified" content="2022-03-24T17:43:05&#43;08:00" />
+<meta itemprop="wordCount" content="778">
 <meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="My First Post"/>
-<meta name="twitter:description" content="大家好，这是我的第一篇博客。"/>
+<meta name="twitter:title" content="Git从入门到进阶之本地仓库"/>
+<meta name="twitter:description" content="前情提要：本文旨在让初学者快速上手，想了解更多细节请查阅 Git官方文档 以及自行Google其他教程。 ##Git简介与安装 Git是目前世界上使"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -123,19 +123,109 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <article class="post">
-  <div class="post-content">
-    <h1 id="大家好这是我的第一篇博客">大家好，这是我的第一篇博客。</h1>
+    
+    <header class="post-header">
+      <h1 class="post-title">Git从入门到进阶之本地仓库</h1>
 
+      <div class="post-meta">
+        <span class="post-time"> 2022-03-24 17:43 </span>
+        
+          <span class="more-meta"> 约 778 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents"></nav>
   </div>
-</article>
+</div>
+    <div class="post-content">
+      <p><strong>前情提要：本文旨在让初学者快速上手，想了解更多细节请查阅 <a href="https://git-scm.com/docs">Git官方文档</a> 以及自行Google其他教程。</strong></p>
+<p>##Git简介与安装
+<code>Git</code>是目前世界上使用最广泛的分布式版本控制系统，没有之一。好，废话不多说，让我们开始。</p>
+<p>安装，只举几个例子：</p>
+<ul>
+<li>Ubuntu/Debian: <code>sudo apt-get install git</code></li>
+<li>MacOS : <code>brew install git</code></li>
+<li>Windows: 访问 <a href="https://git-scm.com/download/win">官方网站</a> 下载
+<ul>
+<li><code>git version</code>查看是否安装成功</li>
+<li>安装出问题，请自行搜索</li>
+</ul>
+</li>
+</ul>
+<p>然后配置以下两行：</p>
+<p><code>git config --global user.name 你的英文名</code></p>
+<p><code>git config --global user.name 你的邮箱</code>
+##GitHub 全球最大的同性交友平台
+<code>GitHub</code>是世界上开发者最多的聚集地，你一定听说过它：</p>
+<p><img src="" alt="同性交友图片"></p>
+<p><code>Git</code>就是打开<code>GitHub</code>的钥匙，想要一起来同性交友么？让我们先学会使用<code>Git</code>。</p>
+<p>##Git本地仓库
+<strong>常用基础命令:</strong></p>
+<p><code>git init</code>会创建<code>.git</code>目录，即本地仓库。(<code>init</code>即初始化)</p>
+<p><code>git add 路径</code>会把你指定路径的变动提交到暂存区，路径可以是绝对路径、相对路径、<code>.和*</code>。</p>
+<p><code>.gitignore</code>描述哪些变动是不需要提交的。（常见有<code>.DS_Store</code>、<code>.idea</code>、<code>.vscode</code>等）</p>
+<p><code>git commit -m 字符串</code>把暂存区的变动提交到本地仓库，字符串即提交理由,字符串里如果有空格，就要用引号<code>&quot;&quot;</code>包起来。</p>
+<p><code>git log</code>用来查看之前的提交历史。</p>
+<p><code>git reflog</code>用来查看所有历史。</p>
+<p><code>git branch X</code>创造X分支。</p>
+<p><code>git checkout X</code>切换到X分支。</p>
+<p><code>git merge</code>将另一个分支合并到当前分支，合并分支有可能会产生冲突。</p>
+<p><code>git status -sb</code>查看哪个/哪些文件冲突，删除掉文件中的<code>====</code>、<code>&gt;&gt;&gt;&gt;</code>、<code>&lt;&lt;&lt;&lt;</code>这些标记，解决冲突。</p>
+<p><code>git branch -d X</code>删除掉无用分支X。</p>
+<p><strong>一些细节：</strong></p>
+<ul>
+<li><code>.git</code>目录就是本地仓库
+<ul>
+<li>它不会重复复制相同的文件</li>
+<li>它可以支持多个分支</li>
+</ul>
+</li>
+<li><code>git add</code>处理的是文件变化，而不是文件，比如你删除一个文件后，依然要用<code>git add</code>来添加到暂存区。</li>
+<li><code>git commit</code> 不加<code>-m</code>参数默认进入<code>vim</code>编辑器，如遇到请搜索「如何退出Vim」，当然你也可以配置其他的编辑器为默认编辑器。</li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Yuanbin Jiang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-03-24 17:43
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/test-it/">
+            <span class="next-text nav-default">Test It</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
         </div>
         <div id="gitalk-container"></div>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
     <script type="text/javascript">
       var gitalk = new Gitalk({
-        id: '2022-03-23 22:25:36 \u002b0800 CST',
-        title: 'My First Post',
+        id: '2022-03-24 17:43:05 \u002b0800 CST',
+        title: 'Git从入门到进阶之本地仓库',
         clientID: '',
         clientSecret: '',
         repo: '',

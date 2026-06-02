@@ -6,7 +6,7 @@ const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const css = readFileSync(join(root, "assets/styles.css"), "utf8").trim();
 const pages = [
   "index.html",
-  "articles/agent-llm-harness.html",
+  "articles/local-toolchain-state-ownership.html",
 ];
 
 const styleBlock = [
@@ -25,6 +25,10 @@ for (const page of pages) {
   );
 
   if (next === html) {
+    if (html.includes(styleBlock)) {
+      continue;
+    }
+
     throw new Error(`Could not find stylesheet marker in ${page}`);
   }
 

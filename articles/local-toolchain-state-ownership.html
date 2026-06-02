@@ -331,7 +331,6 @@
       </header>
 
       <article class="article-body">
-        <p>我最近在用 Codex App、Codex++、CC Switch 这一套东西，踩了一些坑，顺便分享给大家。</p>
         <p>故事是这样子的，最近用 Codex 有点上瘾，因为我有多个 GPT 的 API Provider，所以自然就想到用 CC Switch 的本地路由 + 自动故障转移，让 Codex 始终只看到一个本地入口，后面再由 CC Switch 负责切换 Provider。</p>
         <p>一开始因为 API Key 登录模式没办法使用插件，研究了一下发现官方不支持，也有挺多相关的 issue，不想等官方解决，于是就选择用 Codex++ 解决，每次用外部 Launcher 启动 Codex App，也可以注入很多自定义的脚本。</p>
         <p>然后前几天 Codex App 出了移动端的功能，可以手机连电脑上的 Codex App，我也想尝试一下，毕竟可以出门的时候也可以和 Codex 交互，不用一直在家里等着。于是我就想让 ChatGPT 账号登录的同时 model_provider 走 API ，这里还是用 Codex++ 的中转注入(兼容增强）模式解决，官方登录的同时混入 API。到这里我还没有意识到什么。</p>

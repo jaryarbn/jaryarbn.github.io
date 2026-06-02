@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jaryarbn - Notes on Agent Systems</title>
+    <meta name="description" content="关于 Agent、工具链、Harness 和工程维护的个人技术笔记。">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/assets/styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true">J</span>
+        <span>jaryarbn</span>
+      </a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="/">文章</a>
+        <a href="https://github.com/jaryarbn">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="site-title">
+        <div>
+          <p class="eyebrow">Agent Systems / Local Tooling / Harness</p>
+          <h1 id="site-title">把聪明的模型放进可维护的系统里</h1>
+          <p class="hero-copy">
+            这里记录我对 Agent 工具链、配置所有权、权限边界、故障恢复和工程维护的观察。
+            我关心的不只是模型能力，也关心模型外面那套让系统可控的 Harness。
+          </p>
+        </div>
+
+        <aside class="diagram" aria-label="Agent equals LLM plus Harness">
+          <p class="diagram-title">A practical mental model</p>
+          <div class="equation">
+            <div class="node">
+              <strong>LLM</strong>
+              <span>推理、生成、理解上下文</span>
+            </div>
+            <div class="operator">+</div>
+            <div class="node">
+              <strong>Harness</strong>
+              <span>工具、权限、策略、验证、恢复</span>
+            </div>
+          </div>
+          <ul class="stack">
+            <li><strong>Policy</strong><span>谁能改什么</span></li>
+            <li><strong>Routing</strong><span>请求怎么走</span></li>
+            <li><strong>Recovery</strong><span>失败后怎么回来</span></li>
+            <li><strong>Observability</strong><span>为什么会这样</span></li>
+          </ul>
+        </aside>
+      </section>
+
+      <section class="section-band">
+        <div class="content">
+          <div class="article-list">
+            <a class="article-card" href="/articles/agent-llm-harness.html">
+              <p class="meta">2026-06-02 · 工程复盘</p>
+              <h2>Agent = LLM + Harness：复杂工具链里的所有权边界</h2>
+              <p class="summary">
+                一次本地 Agent 工具链维护让我重新理解了 Agent 的本质：LLM 只是推理核心，
+                真正决定系统行为的是 Harness。复杂系统真正危险的地方，不是组件多，
+                而是共享状态没有明确所有权。
+              </p>
+              <div class="tags" aria-label="Tags">
+                <span class="tag">Agent</span>
+                <span class="tag">LLM</span>
+                <span class="tag">Harness</span>
+                <span class="tag">配置管理</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>Published with GitHub Pages. Static files, no build step.</span>
+    </footer>
+  </body>
+</html>

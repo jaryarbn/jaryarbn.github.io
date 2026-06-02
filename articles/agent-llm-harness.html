@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Agent = LLM + Harness：复杂工具链里的所有权边界</title>
+    <meta name="description" content="一次本地 Agent 工具链维护带来的工程复盘：LLM 只是推理核心，Harness 才是决定 Agent 行为边界的广义约束系统。">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/assets/styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true">J</span>
+        <span>jaryarbn</span>
+      </a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="/">文章</a>
+        <a href="https://github.com/jaryarbn">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="article">
+      <header class="article-header">
+        <p class="eyebrow">Agent Systems / Harness</p>
+        <h1>Agent = LLM + Harness：复杂工具链里的所有权边界</h1>
+        <p class="meta">2026-06-02 · 工程复盘</p>
+        <p class="summary">
+          一次本地 Agent 工具链维护让我重新理解了 Agent 的本质：LLM 只是推理核心，
+          真正决定系统行为的是 Harness。Harness 不是某个框架，而是由工具、权限、
+          上下文、策略、验证、恢复和观测共同组成的广义约束系统。
+        </p>
+        <div class="tags" aria-label="Tags">
+          <span class="tag">Agent</span>
+          <span class="tag">LLM</span>
+          <span class="tag">Harness</span>
+          <span class="tag">本地工具链</span>
+          <span class="tag">配置管理</span>
+        </div>
+      </header>
+
+      <article class="article-body">
+        <p>
+          最近维护本地 Agent 工具链时，我遇到的主要问题并不是“模型能力够不够”，
+          而是更工程化、更容易被低估的一类问题：多个工具都可能修改同一组配置，
+          都可能影响登录态、代理路由、API Provider 选择和自动故障转移。
+        </p>
+
+        <p>
+          单看每个工具，它们都很合理。一个工具负责保持官方登录态，一个工具负责把官方登录和
+          API 增强模式混合起来，一个工具负责本地代理路由和多个 Provider 的故障转移。
+          每个组件都在解决真实问题。
+        </p>
+
+        <p>
+          但当它们同时存在时，系统开始出现另一层复杂度：到底谁拥有配置？谁可以写入？
+          谁只是读取？当请求失败时，谁负责切换 Provider？当登录态失效时，谁负责恢复？
+          当代理规则变化时，谁需要感知？
+        </p>
+
+        <blockquote>
+          Agent = LLM + Harness。LLM 是推理核心，但 Agent 的实际行为不是只由模型决定的。
+          真正让一个 Agent 能行动、能受控、能恢复、能被信任的，是它外面的 Harness。
+        </blockquote>
+
+        <h2>Agent 不是更聪明的聊天框</h2>
+
+        <p>
+          很多时候我们讨论 Agent，会自然把注意力放到模型上：上下文长度、工具调用能力、
+          推理质量、函数调用格式、多模态能力、代码能力。
+        </p>
+
+        <p>
+          这些当然重要。没有足够强的 LLM，Agent 很难完成复杂任务。但只看 LLM，
+          会漏掉 Agent 系统里更关键的一半。
+        </p>
+
+        <p>一个能工作的 Agent 至少还需要知道：</p>
+
+        <ul>
+          <li>它能使用哪些工具；</li>
+          <li>它能读写哪些文件；</li>
+          <li>它是否能访问网络；</li>
+          <li>它使用什么身份和登录态；</li>
+          <li>它如何选择模型或 API Provider；</li>
+          <li>它如何处理失败、重试和降级；</li>
+          <li>它的行为如何被记录和审计；</li>
+          <li>它在危险操作前是否需要确认；</li>
+          <li>它如何知道自己做完了，或者做错了。</li>
+        </ul>
+
+        <p>这些都不属于 LLM 本身。它们共同构成了 Harness。</p>
+
+        <h2>Harness 不是某个框架</h2>
+
+        <p>
+          我以前也容易把 Harness 理解得太窄，仿佛它就是某个 Agent 框架、某个运行时、
+          某个工具调用协议。现在我更愿意把 Harness 理解为一个广义约束系统。
+        </p>
+
+        <p>
+          它不是单个库，也不是单个配置文件，而是一整套围绕 LLM 的工程边界：
+        </p>
+
+        <ul>
+          <li><strong>工具：</strong>Agent 可以调用什么，工具输入输出如何表达；</li>
+          <li><strong>权限：</strong>哪些操作允许自动执行，哪些操作必须等待确认；</li>
+          <li><strong>上下文：</strong>哪些信息会被放进模型输入，哪些必须隔离；</li>
+          <li><strong>策略：</strong>如何选择模型、路由请求、处理成本和延迟；</li>
+          <li><strong>验证：</strong>如何确认任务真的完成，而不是模型说完成；</li>
+          <li><strong>恢复：</strong>失败后如何重试、回滚、降级或交接；</li>
+          <li><strong>观测：</strong>如何记录请求、配置变化、错误和决策路径。</li>
+        </ul>
+
+        <p>
+          这些机制叠在一起，决定了 Agent 的真实行为边界。所以，一个 Agent 的能力并不只是
+          “模型会不会”。更准确地说，能力来自模型和 Harness 的组合：模型负责推理，
+          Harness 负责把推理变成可执行、可约束、可恢复的系统行为。
+        </p>
+
+        <h2>复杂工具链里的问题：谁拥有状态？</h2>
+
+        <p>本地工具链一旦变复杂，最容易出问题的是共享状态。</p>
+
+        <p>例如，多个组件可能都会关心同几类状态：</p>
+
+        <ul>
+          <li>官方登录态；</li>
+          <li>本地代理地址；</li>
+          <li>API Provider 列表；</li>
+          <li>当前选中的模型；</li>
+          <li>请求路由规则；</li>
+          <li>failover 策略；</li>
+          <li>超时和重试参数；</li>
+          <li>工具权限和文件访问边界。</li>
+        </ul>
+
+        <p>如果这些状态没有明确所有权，就会出现一些典型问题。</p>
+
+        <p>
+          第一类问题是互相覆盖。一个工具刚写入配置，另一个工具认为配置过期，
+          又按自己的理解写回去。最后表面上看是配置不稳定，本质上是两个写入者没有边界。
+        </p>
+
+        <p>
+          第二类问题是责任不清。请求失败时，模型层、代理层、Provider 层、登录态层都可能报错。
+          没有清晰边界时，很难判断应该刷新登录、切换 Provider、修改代理，还是调整请求参数。
+        </p>
+
+        <p>
+          第三类问题是恢复路径混乱。自动 failover 本来是提高可用性的机制，但如果多个层级都在自动切换，
+          就可能让系统进入难以解释的状态：请求确实恢复了，但没人知道为什么恢复；
+          或者请求失败了，但日志里有太多互相干扰的重试。
+        </p>
+
+        <p>这些问题不是某个工具写得不好。它们是 Harness 设计问题。</p>
+
+        <h2>所有权边界比功能更多更重要</h2>
+
+        <p>一个实用原则是：每一类状态都应该有明确 owner。</p>
+
+        <ul>
+          <li>登录态由负责官方会话的组件拥有，其他组件只消费结果；</li>
+          <li>API Provider 清单由路由层拥有，Agent 运行时不要随意改写；</li>
+          <li>failover 策略由代理或网关层执行，调用方只看到稳定接口；</li>
+          <li>工具权限由 Agent Harness 拥有，不应该被模型输出动态放大；</li>
+          <li>敏感凭据由系统凭据管理或专用配置层保存，不进入文章、日志和提示词。</li>
+        </ul>
+
+        <p>这背后的原则可以概括成四句话：</p>
+
+        <div class="principles">
+          <div class="principle">
+            <strong>单写者，多读者。</strong>
+            同一份关键状态尽量只有一个组件负责写入。其他组件可以读取，但不要同时争夺写权限。
+          </div>
+          <div class="principle">
+            <strong>显式交接。</strong>
+            如果某层确实需要把控制权交给另一层，应该通过明确接口完成，而不是让两个工具同时扫描和修改同一份配置。
+          </div>
+          <div class="principle">
+            <strong>可观测。</strong>
+            关键决策要能被追踪：这次请求走了哪个 Provider，为什么发生重试，为什么触发 failover，最终由谁恢复。
+          </div>
+          <div class="principle">
+            <strong>可回滚。</strong>
+            配置变化前最好能有快照。出问题时，恢复到已知状态比继续猜测更可靠。
+          </div>
+        </div>
+
+        <p>
+          这些原则听起来朴素，但在 Agent 工具链里非常关键。因为 Agent 的输出本来就带有不确定性，
+          如果 Harness 的状态边界也不确定，整个系统就会变成双重不确定。
+        </p>
+
+        <h2>Harness 是能力，也是限制</h2>
+
+        <p>
+          很多人会把限制理解为能力的反面。但在 Agent 系统里，限制恰恰是能力的一部分。
+        </p>
+
+        <p>
+          文件访问边界让 Agent 可以安全地处理项目，而不是误伤无关目录。工具权限让 Agent 可以执行真实操作，
+          而不是只能给建议。代理路由和 Provider failover 让 Agent 可以在外部服务波动时继续工作。
+          验证步骤让 Agent 的“完成了”变成可检查的事实，而不是一句自然语言声明。
+          恢复机制让一次失败不会直接终止整个任务。
+        </p>
+
+        <p>
+          这些都不是模型参数里的能力，但它们决定了 Agent 能不能在真实环境里稳定工作。
+          换句话说，Harness 不是 LLM 外面的一层包装。它是 Agent 系统的一半。
+        </p>
+
+        <h2>对本地 Agent 工具链的启发</h2>
+
+        <p>这次复盘后，我会用下面几个问题检查任何复杂 Agent 工具链：</p>
+
+        <ol>
+          <li>哪些状态是共享状态？</li>
+          <li>每类状态的 owner 是谁？</li>
+          <li>哪些组件有写权限，哪些只有读权限？</li>
+          <li>请求失败时，哪一层先处理？</li>
+          <li>failover 是单层负责，还是多层同时负责？</li>
+          <li>登录态、API key、代理配置是否互相解耦？</li>
+          <li>配置变化是否有快照和恢复路径？</li>
+          <li>日志能否解释一次请求最终为什么成功或失败？</li>
+        </ol>
+
+        <p>
+          如果这些问题答不清楚，继续增加工具通常只会增加复杂度。
+          更好的做法是先把 Harness 的边界理顺。
+        </p>
+
+        <h2>结语</h2>
+
+        <p>Agent 的核心公式可以很简单：</p>
+
+        <blockquote>Agent = LLM + Harness。</blockquote>
+
+        <p>LLM 决定了系统能理解什么、能推理什么、能生成什么。</p>
+
+        <p>
+          Harness 决定了系统能做什么、能碰什么、怎么失败、怎么恢复、怎么被观察，
+          以及怎么避免越界。
+        </p>
+
+        <p>
+          当工具链很简单时，Harness 可能只是几个脚本、几个工具权限和一份配置。
+          等工具链复杂起来，Harness 就会变成真正的工程系统。
+        </p>
+
+        <p>
+          这时最重要的问题不再是还能接入什么能力，而是：谁拥有哪一层状态？
+          谁可以修改？谁负责验证？谁负责恢复？
+        </p>
+
+        <p>
+          把这些边界说清楚，Agent 才不只是一个会调用工具的模型，
+          而是一个可以长期维护的系统。
+        </p>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <span><a href="/">返回首页</a></span>
+    </footer>
+  </body>
+</html>

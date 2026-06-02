@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>从本地工具链的冲突、状态所有权到 Harness：复杂系统为什么需要边界</title>
-    <meta name="description" content="一次本地 Agent 工具链维护带来的工程复盘：LLM 只是推理核心，Harness 才是决定 Agent 行为边界的广义约束系统。">
+    <meta name="description" content="我最近在用 Codex App、Codex++、CC Switch 这一套东西，踩了一些坑，顺便分享给大家。">
     <link rel="icon" href="data:,">
     <style data-inline-source="/assets/styles.css">
       /* Inlined to avoid an extra render-blocking request on slow routes. */
@@ -295,242 +295,87 @@
 
     <main class="article">
       <header class="article-header">
-        <p class="eyebrow">Agent Systems / Harness</p>
+        <p class="eyebrow">Codex / Harness / Complex Systems</p>
         <h1>从本地工具链的冲突、状态所有权到 Harness：复杂系统为什么需要边界</h1>
-        <p class="meta">2026-06-02 · 工程复盘</p>
-        <p class="summary">
-          一次本地 Agent 工具链维护让我重新理解了 Agent 的本质：LLM 只是推理核心，
-          真正决定系统行为的是 Harness。Harness 不是某个框架，而是由工具、权限、
-          上下文、策略、验证、恢复和观测共同组成的广义约束系统。
-        </p>
+        <p class="meta">2026-06-03 · 工程复盘</p>
+        <p class="summary">我最近在用 Codex App、Codex++、CC Switch 这一套东西，踩了一些坑，顺便分享给大家。</p>
         <div class="tags" aria-label="Tags">
-          <span class="tag">Agent</span>
-          <span class="tag">LLM</span>
+          <span class="tag">Codex</span>
           <span class="tag">Harness</span>
-          <span class="tag">本地工具链</span>
           <span class="tag">配置管理</span>
+          <span class="tag">复杂系统</span>
         </div>
       </header>
 
       <article class="article-body">
-        <p>
-          最近维护本地 Agent 工具链时，我遇到的主要问题并不是“模型能力够不够”，
-          而是更工程化、更容易被低估的一类问题：多个工具都可能修改同一组配置，
-          都可能影响登录态、代理路由、API Provider 选择和自动故障转移。
-        </p>
-
-        <p>
-          单看每个工具，它们都很合理。一个工具负责保持官方登录态，一个工具负责把官方登录和
-          API 增强模式混合起来，一个工具负责本地代理路由和多个 Provider 的故障转移。
-          每个组件都在解决真实问题。
-        </p>
-
-        <p>
-          但当它们同时存在时，系统开始出现另一层复杂度：到底谁拥有配置？谁可以写入？
-          谁只是读取？当请求失败时，谁负责切换 Provider？当登录态失效时，谁负责恢复？
-          当代理规则变化时，谁需要感知？
-        </p>
-
-        <blockquote>
-          Agent = LLM + Harness。LLM 是推理核心，但 Agent 的实际行为不是只由模型决定的。
-          真正让一个 Agent 能行动、能受控、能恢复、能被信任的，是它外面的 Harness。
-        </blockquote>
-
-        <h2>Agent 不是更聪明的聊天框</h2>
-
-        <p>
-          很多时候我们讨论 Agent，会自然把注意力放到模型上：上下文长度、工具调用能力、
-          推理质量、函数调用格式、多模态能力、代码能力。
-        </p>
-
-        <p>
-          这些当然重要。没有足够强的 LLM，Agent 很难完成复杂任务。但只看 LLM，
-          会漏掉 Agent 系统里更关键的一半。
-        </p>
-
-        <p>一个能工作的 Agent 至少还需要知道：</p>
-
+        <p>我最近在用 Codex App、Codex++、CC Switch 这一套东西，踩了一些坑，顺便分享给大家。</p>
+        <p>故事是这样子的，最近用 Codex 有点上瘾，因为我有多个 GPT 的 API Provider，所以自然就想到用 CC Switch 的本地路由 + 自动故障转移，同步历史会话的同时也方便切换 Provider。一开始因为 API Key 登录模式没办法使用插件，研究了一下发现官方不支持，也有挺多相关的 issue，不想等官方解决，于是就选择用 Codex++ 解决，每次用外部 Launcher 启动 Codex App，也可以注入很多自定义的脚本。然后前几天 Codex App 出了移动端的功能，可以手机连电脑上的 Codex App，我也想尝试一下，毕竟可以出门的时候也可以和 Codex 交互，不用一直在家里等着。于是我就想让 ChatGPT 账号登录的同时 model_provider 走 API ，这里还是用 Codex++ 的中转注入(兼容增强）模式解决，官方登录的同时混入 API。到这里我还没有意识到什么。</p>
+        <p>直到昨天早上，我发现我的 Codex App 插件那一栏变灰了，之前也经常遇到这种问题可能是 Codex++后端又没连上吧，于是我就重启了 Codex App。这次插件倒是没变灰，过了两分钟之后我发现对话 disconnect 了，它居然提示我额度不足，让我升级到 Plus（因为我是 Free 账号额度肯定就用光了） ，现在我没有走自定义的 Provider，走的是官方的额度。于是我就让 Codex 自己去修一下修好了，等过了一会它居然又变成插件变灰的情况了。邪门的是，我去看了一下 config.toml 里面居然是空的，我又改回到正确的方式了，然后过了一会 base_url 居然被改成了 Provider 自己的 url，按照 CC Switch 的本地路由这里应该是 http://127.0.0.1:15721/v1 的。这时候我就在想是不是其他的 Codex 线程改了我的配置？我看了一下可能还真是，而且不只是 config.toml，auth.json等好几个配置文件都在频繁被修改，不只是 Codex 在改，CC Switch 在改，就连 Codex++ 的管理工具都有改我配置的记录。</p>
+        <p>我寻思这下坏了，于是我就让 Codex 把目前的状态对齐到我想要的状态。也就是：</p>
         <ul>
-          <li>它能使用哪些工具；</li>
-          <li>它能读写哪些文件；</li>
-          <li>它是否能访问网络；</li>
-          <li>它使用什么身份和登录态；</li>
-          <li>它如何选择模型或 API Provider；</li>
-          <li>它如何处理失败、重试和降级；</li>
-          <li>它的行为如何被记录和审计；</li>
-          <li>它在危险操作前是否需要确认；</li>
-          <li>它如何知道自己做完了，或者做错了。</li>
+          <li><code>model_provider=custom</code></li>
+          <li><code>base_url=http://127.0.0.1:15721/v1</code></li>
+          <li><code>requires_openai_auth=true</code></li>
+          <li>补 mixed API bearer token</li>
+          <li>Codex++ <code>officialMixApiKey=true</code></li>
+          <li>Codex++ <code>ccsLinkEnabled=false</code></li>
+          <li>CC Switch <code>preserveCodexOfficialAuthOnSwitch=true</code></li>
         </ul>
-
-        <p>这些都不属于 LLM 本身。它们共同构成了 Harness。</p>
-
-        <h2>Harness 不是某个框架</h2>
-
-        <p>
-          我以前也容易把 Harness 理解得太窄，仿佛它就是某个 Agent 框架、某个运行时、
-          某个工具调用协议。现在我更愿意把 Harness 理解为一个广义约束系统。
-        </p>
-
-        <p>
-          它不是单个库，也不是单个配置文件，而是一整套围绕 LLM 的工程边界：
-        </p>
-
+        <p>同时，为了防止它再坏，我又加了守卫/防漂移机制：</p>
         <ul>
-          <li><strong>工具：</strong>Agent 可以调用什么，工具输入输出如何表达；</li>
-          <li><strong>权限：</strong>哪些操作允许自动执行，哪些操作必须等待确认；</li>
-          <li><strong>上下文：</strong>哪些信息会被放进模型输入，哪些必须隔离；</li>
-          <li><strong>策略：</strong>如何选择模型、路由请求、处理成本和延迟；</li>
-          <li><strong>验证：</strong>如何确认任务真的完成，而不是模型说完成；</li>
-          <li><strong>恢复：</strong>失败后如何重试、回滚、降级或交接；</li>
-          <li><strong>观测：</strong>如何记录请求、配置变化、错误和决策路径。</li>
+          <li><code>codex-config-guard.sh</code> 检查关键状态是否脱离目标</li>
+          <li>LaunchAgent 定时运行监听文件状态</li>
+          <li>给 <code>~/.codex/config.toml</code> 加 <code>uchg</code>，需要我手动解锁才能改</li>
         </ul>
-
-        <p>
-          这些机制叠在一起，决定了 Agent 的真实行为边界。所以，一个 Agent 的能力并不只是
-          “模型会不会”。更准确地说，能力来自模型和 Harness 的组合：模型负责推理，
-          Harness 负责把推理变成可执行、可约束、可恢复的系统行为。
-        </p>
-
-        <h2>复杂工具链里的问题：谁拥有状态？</h2>
-
-        <p>本地工具链一旦变复杂，最容易出问题的是共享状态。</p>
-
-        <p>例如，多个组件可能都会关心同几类状态：</p>
-
+        <p>到这里，我觉得应该不会出问题了，直到昨天下午 Guard 开始反复报 CC Switch local proxy or preserve-auth settings drifted，直接原因是：<code>~/.cc-switch/settings.json</code> 里的<br><code>preserveCodexOfficialAuthOnSwitch=false</code>，我尝试给它改到 true，过了一会 CC Switch又把它改回来了，因为自动故障转移会尝试去修改 Provider，它会先改自己的这个字段。于是我就把 Guard 增加了 <code>--repair-ccswitch-preserve-auth</code>，到目前为止还没出现问题。</p>
+        <p>我去看了 CC Switch 前天刚刚更新的v3.16.1，在这个版本里面它明确支持“官方 ChatGPT/Codex OAuth 登录态保留在 <code>auth.json</code>，第三方 API token 写到 <code>config.toml</code>”，并且修了本地路由接管、热切换时把 live config 覆盖掉的问题。但这个能力 <strong>默认关闭</strong>，必须手动开启。<br>Codex++这边呢，昨天晚上刚刚更新的 v1.1.9，修了 mixed API 模式丢 key。</p>
+        <p>我把 CC Switch 更新到了v3.16.1，可以说，对于我目前的情况，CC Switch 最新版大部分都修掉了：</p>
         <ul>
-          <li>官方登录态；</li>
-          <li>本地代理地址；</li>
-          <li>API Provider 列表；</li>
-          <li>当前选中的模型；</li>
-          <li>请求路由规则；</li>
-          <li>failover 策略；</li>
-          <li>超时和重试参数；</li>
-          <li>工具权限和文件访问边界。</li>
+          <li>官方 ChatGPT / Codex OAuth 登录态保留：第三方 token 放 <code>config.toml</code>，官方登录态留在 <code>auth.json</code>。</li>
+          <li>本地路由接管更稳：热切换时 endpoint 仍保持本地代理，不把真实上游泄回 live config。</li>
+          <li>修了接管期间 OAuth 被清空/覆盖的路径。</li>
+          <li>修了 Chat Completions 上游里 tool_search、插件、connector、自定义工具恢复成 Responses 形态的问题。</li>
         </ul>
-
-        <p>如果这些状态没有明确所有权，就会出现一些典型问题。</p>
-
-        <p>
-          第一类问题是互相覆盖。一个工具刚写入配置，另一个工具认为配置过期，
-          又按自己的理解写回去。最后表面上看是配置不稳定，本质上是两个写入者没有边界。
-        </p>
-
-        <p>
-          第二类问题是责任不清。请求失败时，模型层、代理层、Provider 层、登录态层都可能报错。
-          没有清晰边界时，很难判断应该刷新登录、切换 Provider、修改代理，还是调整请求参数。
-        </p>
-
-        <p>
-          第三类问题是恢复路径混乱。自动 failover 本来是提高可用性的机制，但如果多个层级都在自动切换，
-          就可能让系统进入难以解释的状态：请求确实恢复了，但没人知道为什么恢复；
-          或者请求失败了，但日志里有太多互相干扰的重试。
-        </p>
-
-        <p>这些问题不是某个工具写得不好。它们是 Harness 设计问题。</p>
-
-        <h2>所有权边界比功能更多更重要</h2>
-
-        <p>一个实用原则是：每一类状态都应该有明确 owner。</p>
-
+        <p>它把 <strong>CC Switch 自己这条链路里的几个大坑</strong> 修了不少，但没有解决我整套 Codex App + Codex++ + CC Switch 组合里的“状态所有权”问题：</p>
         <ul>
-          <li>登录态由负责官方会话的组件拥有，其他组件只消费结果；</li>
-          <li>API Provider 清单由路由层拥有，Agent 运行时不要随意改写；</li>
-          <li>failover 策略由代理或网关层执行，调用方只看到稳定接口；</li>
-          <li>工具权限由 Agent Harness 拥有，不应该被模型输出动态放大；</li>
-          <li>敏感凭据由系统凭据管理或专用配置层保存，不进入文章、日志和提示词。</li>
+          <li><strong>它只能管 CC Switch 自己的写入</strong>  <br>v3.16.1 加的是 CC Switch 内部的 per-app 锁、接管判断、备份/占位符判断。它管不了Codex++、Codex App、其他 agent、手动脚本去改 <code>~/.codex/config.toml</code> 或 <code>auth.json</code>。</li>
         </ul>
-
-        <p>这背后的原则可以概括成四句话：</p>
-
-        <div class="principles">
-          <div class="principle">
-            <strong>单写者，多读者。</strong>
-            同一份关键状态尽量只有一个组件负责写入。其他组件可以读取，但不要同时争夺写权限。
-          </div>
-          <div class="principle">
-            <strong>显式交接。</strong>
-            如果某层确实需要把控制权交给另一层，应该通过明确接口完成，而不是让两个工具同时扫描和修改同一份配置。
-          </div>
-          <div class="principle">
-            <strong>可观测。</strong>
-            关键决策要能被追踪：这次请求走了哪个 Provider，为什么发生重试，为什么触发 failover，最终由谁恢复。
-          </div>
-          <div class="principle">
-            <strong>可回滚。</strong>
-            配置变化前最好能有快照。出问题时，恢复到已知状态比继续猜测更可靠。
-          </div>
-        </div>
-
-        <p>
-          这些原则听起来朴素，但在 Agent 工具链里非常关键。因为 Agent 的输出本来就带有不确定性，
-          如果 Harness 的状态边界也不确定，整个系统就会变成双重不确定。
-        </p>
-
-        <h2>Harness 是能力，也是限制</h2>
-
-        <p>
-          很多人会把限制理解为能力的反面。但在 Agent 系统里，限制恰恰是能力的一部分。
-        </p>
-
-        <p>
-          文件访问边界让 Agent 可以安全地处理项目，而不是误伤无关目录。工具权限让 Agent 可以执行真实操作，
-          而不是只能给建议。代理路由和 Provider failover 让 Agent 可以在外部服务波动时继续工作。
-          验证步骤让 Agent 的“完成了”变成可检查的事实，而不是一句自然语言声明。
-          恢复机制让一次失败不会直接终止整个任务。
-        </p>
-
-        <p>
-          这些都不是模型参数里的能力，但它们决定了 Agent 能不能在真实环境里稳定工作。
-          换句话说，Harness 不是 LLM 外面的一层包装。它是 Agent 系统的一半。
-        </p>
-
-        <h2>对本地 Agent 工具链的启发</h2>
-
-        <p>这次复盘后，我会用下面几个问题检查任何复杂 Agent 工具链：</p>
-
-        <ol>
-          <li>哪些状态是共享状态？</li>
-          <li>每类状态的 owner 是谁？</li>
-          <li>哪些组件有写权限，哪些只有读权限？</li>
-          <li>请求失败时，哪一层先处理？</li>
-          <li>failover 是单层负责，还是多层同时负责？</li>
-          <li>登录态、API key、代理配置是否互相解耦？</li>
-          <li>配置变化是否有快照和恢复路径？</li>
-          <li>日志能否解释一次请求最终为什么成功或失败？</li>
-        </ol>
-
-        <p>
-          如果这些问题答不清楚，继续增加工具通常只会增加复杂度。
-          更好的做法是先把 Harness 的边界理顺。
-        </p>
-
-        <h2>结语</h2>
-
-        <p>Agent 的核心公式可以很简单：</p>
-
-        <blockquote>Agent = LLM + Harness。</blockquote>
-
-        <p>LLM 决定了系统能理解什么、能推理什么、能生成什么。</p>
-
-        <p>
-          Harness 决定了系统能做什么、能碰什么、怎么失败、怎么恢复、怎么被观察，
-          以及怎么避免越界。
-        </p>
-
-        <p>
-          当工具链很简单时，Harness 可能只是几个脚本、几个工具权限和一份配置。
-          等工具链复杂起来，Harness 就会变成真正的工程系统。
-        </p>
-
-        <p>
-          这时最重要的问题不再是还能接入什么能力，而是：谁拥有哪一层状态？
-          谁可以修改？谁负责验证？谁负责恢复？
-        </p>
-
-        <p>
-          把这些边界说清楚，Agent 才不只是一个会调用工具的模型，
-          而是一个可以长期维护的系统。
-        </p>
+        <ul>
+          <li><strong>修改模型映射后仍要重启 Codex</strong>  <br>官方升级提醒里也说，Codex 启动时读 <code>model_catalog_json</code>，改映射后仍需重启 Codex 才能刷新 <code>/model</code> 菜单。</li>
+        </ul>
+        <ul>
+          <li><strong>本地接管状态仍然是复杂状态</strong>  <br>release 里还专门提醒：接管期间 live 文件会临时指向代理，编辑 Provider 时看到的是数据库里的配置，不是 live 文件。这说明状态被拆成 DB、backup、live config、proxy runtime 几层，复杂性还在。</li>
+        </ul>
+        <p>后来我意识到，自动故障转移本身就是一个会写状态的机制。它不是单纯地“观察哪个 Provider 可用”，而是会更新当前 Provider、失败计数、路由状态，甚至在某些路径下影响 Codex 的 live 配置。所以问题不是要禁止它写，而是要规定它只能写自己该写的那一层。而且每个人都应该负责自己该做的那一层，就比如对我这个问题来说：</p>
+        <ul>
+          <li>Codex App：保持 ChatGPT 登录态  <br><code>~/.codex/auth.json</code> 应该是 <code>auth_mode=&quot;chatgpt&quot;</code>，不能有 <code>OPENAI_API_KEY</code></li>
+        </ul>
+        <ul>
+          <li>Codex 配置：永远只指向本地代理  <br><code>~/.codex/config.toml</code> 里应该是 <code>base_url=&quot;http://127.0.0.1:15721/v1&quot;</code></li>
+        </ul>
+        <ul>
+          <li>CC Switch：只负责本地代理和 Provider failover  <br>failover 可以开，但它不应该把 Codex 改成直连 Provider</li>
+        </ul>
+        <ul>
+          <li>Codex++：保持 official login + mixed API  <br>也就是官方登录态保留，API 能力通过本地代理混入</li>
+        </ul>
+        <ul>
+          <li>守卫：只保护边界，不接管业务  <br>它只该修 <code>preserveCodexOfficialAuthOnSwitch=true</code> 这类关键漂移，不应该乱改 provider 队列</li>
+        </ul>
+        <p>而且每次升级相关工具的时候，都要做验收方便回滚。</p>
+        <p>以上这一切就是为了维护这一套状态，需要付出的“代价”。我这只是几个小小的工具耦合都这么麻烦，真实上线的、复杂度稍微上一点的系统都会有各种各样的问题出现，更不要说很多问题都是系统越来越复杂之后才可以发现的、积重难返的问题，很多坑在前期压根看不到。我甚至不敢想，在 AI 时代，越来越多系统将混入由 AI 生成的大量“屎山代码”。到那时，人和 AI 究竟谁还能真正掌控系统的走向？</p>
+        <p>再多说两句，前段时间不是总说 Harness Engineering 吗？刚开始我还理解成“就是外面包了一层工具调用框架”，假如说 LLM 的能力越来越强的话，那是不是就不需要 Harness 了？现在我对这个问题有了一点自己的看法：LLM 本身像一个很强但会犯错的操作员，Harness 决定它是在裸奔改系统，还是在一个有护栏、有审计、有回滚、有职责边界的环境里工作，更广义地说，它是<strong>把一个不稳定、概率性的智能体放进可控系统里的整套约束环境</strong>。<br>它包括：</p>
+        <ul>
+          <li><strong>权限边界</strong>：能读什么、能写什么、哪些操作必须确认</li>
+          <li><strong>配置所有权</strong>：谁能改哪个文件，谁只能读</li>
+          <li><strong>工作流</strong>：先快照，再修改，再验证，再记录</li>
+          <li><strong>守卫机制</strong>：漂移检测、自愈、报警</li>
+          <li><strong>上下文规范</strong>：AGENTS.md、skills、项目规则、维护日志</li>
+          <li><strong>回滚能力</strong>：快照、备份、版本控制</li>
+          <li><strong>观测性</strong>：日志、状态检查、健康检查</li>
+          <li><strong>默认策略</strong>：遇到冲突时保守，遇到不确定先确认</li>
+        </ul>
+        <p>模型是很重要，但是它也只是其中一个变量，真正决定系统稳不稳，还需要依赖外面这一整圈治理结构。而且越是强的 Agent，Harness 越重要。因为能力越强，误操作的半径也越大。<br>简单来说：<br>Agent = LLM + Harness<br>Harness = Tools + Permissions + Context + Policy + Memory + Verification + Recovery + Observability + ....？<br>所以，AI 时代，工程上的东西目前看来似乎还缺不了。<br>以上。</p>
       </article>
     </main>
 

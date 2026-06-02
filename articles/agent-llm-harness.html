@@ -308,7 +308,6 @@
       </header>
 
       <article class="article-body">
-        <p>我最近在用 Codex App、Codex++、CC Switch 这一套东西，踩了一些坑，顺便分享给大家。</p>
         <p>故事是这样子的，最近用 Codex 有点上瘾，因为我有多个 GPT 的 API Provider，所以自然就想到用 CC Switch 的本地路由 + 自动故障转移，同步历史会话的同时也方便切换 Provider。一开始因为 API Key 登录模式没办法使用插件，研究了一下发现官方不支持，也有挺多相关的 issue，不想等官方解决，于是就选择用 Codex++ 解决，每次用外部 Launcher 启动 Codex App，也可以注入很多自定义的脚本。然后前几天 Codex App 出了移动端的功能，可以手机连电脑上的 Codex App，我也想尝试一下，毕竟可以出门的时候也可以和 Codex 交互，不用一直在家里等着。于是我就想让 ChatGPT 账号登录的同时 model_provider 走 API ，这里还是用 Codex++ 的中转注入(兼容增强）模式解决，官方登录的同时混入 API。到这里我还没有意识到什么。</p>
         <p>直到昨天早上，我发现我的 Codex App 插件那一栏变灰了，之前也经常遇到这种问题可能是 Codex++后端又没连上吧，于是我就重启了 Codex App。这次插件倒是没变灰，过了两分钟之后我发现对话 disconnect 了，它居然提示我额度不足，让我升级到 Plus（因为我是 Free 账号额度肯定就用光了） ，现在我没有走自定义的 Provider，走的是官方的额度。于是我就让 Codex 自己去修一下修好了，等过了一会它居然又变成插件变灰的情况了。邪门的是，我去看了一下 config.toml 里面居然是空的，我又改回到正确的方式了，然后过了一会 base_url 居然被改成了 Provider 自己的 url，按照 CC Switch 的本地路由这里应该是 http://127.0.0.1:15721/v1 的。这时候我就在想是不是其他的 Codex 线程改了我的配置？我看了一下可能还真是，而且不只是 config.toml，auth.json等好几个配置文件都在频繁被修改，不只是 Codex 在改，CC Switch 在改，就连 Codex++ 的管理工具都有改我配置的记录。</p>
         <p>我寻思这下坏了，于是我就让 Codex 把目前的状态对齐到我想要的状态。也就是：</p>

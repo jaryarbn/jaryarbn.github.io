@@ -218,6 +218,11 @@ h3 {
   margin: 6px 0;
 }
 
+.article-body .list-detail {
+  display: block;
+  margin-top: 2px;
+}
+
 .article-body blockquote {
   margin: 28px 0;
   padding: 18px 20px;
@@ -292,5 +297,14 @@ h3 {
 
   .article-body {
     font-size: 16.5px;
+  }
+
+  .article-body ul,
+  .article-body ol {
+    padding-left: 1.15em;
+  }
+
+  .article-body li {
+    margin: 8px 0;
   }
 }

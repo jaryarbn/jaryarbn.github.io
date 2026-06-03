@@ -228,6 +228,11 @@
         margin: 6px 0;
       }
 
+      .article-body .list-detail {
+        display: block;
+        margin-top: 2px;
+      }
+
       .article-body blockquote {
         margin: 28px 0;
         padding: 18px 20px;
@@ -303,6 +308,15 @@
         .article-body {
           font-size: 16.5px;
         }
+
+        .article-body ul,
+        .article-body ol {
+          padding-left: 1.15em;
+        }
+
+        .article-body li {
+          margin: 8px 0;
+        }
       }
     </style>
   </head>
@@ -374,29 +388,17 @@
         </ul>
         <p>它把 <strong>CC Switch 自己这条链路里的几个大坑</strong> 修了不少，但没有解决我整套 Codex App + Codex++ + CC Switch 组合里的“状态所有权”问题：</p>
         <ul>
-          <li><strong>它只能管 CC Switch 自己的写入</strong>  <br>v3.16.1 加的是 CC Switch 内部的 per-app 锁、接管判断、备份/占位符判断。它管不了Codex++、Codex App、其他 agent、手动脚本去改 <code>~/.codex/config.toml</code> 或 <code>auth.json</code>。</li>
-        </ul>
-        <ul>
-          <li><strong>修改模型映射后仍要重启 Codex</strong>  <br>官方升级提醒里也说，Codex 启动时读 <code>model_catalog_json</code>，改映射后仍需重启 Codex 才能刷新 <code>/model</code> 菜单。</li>
-        </ul>
-        <ul>
-          <li><strong>本地接管状态仍然是复杂状态</strong>  <br>release 里还专门提醒：接管期间 live 文件会临时指向代理，编辑 Provider 时看到的是数据库里的配置，不是 live 文件。这说明状态被拆成 DB、backup、live config、proxy runtime 几层，复杂性还在。</li>
+          <li><strong>它只能管 CC Switch 自己的写入</strong> <span class="list-detail">v3.16.1 加的是 CC Switch 内部的 per-app 锁、接管判断、备份/占位符判断。它管不了Codex++、Codex App、其他 agent、手动脚本去改 <code>~/.codex/config.toml</code> 或 <code>auth.json</code>。</span></li>
+          <li><strong>修改模型映射后仍要重启 Codex</strong> <span class="list-detail">官方升级提醒里也说，Codex 启动时读 <code>model_catalog_json</code>，改映射后仍需重启 Codex 才能刷新 <code>/model</code> 菜单。</span></li>
+          <li><strong>本地接管状态仍然是复杂状态</strong> <span class="list-detail">release 里还专门提醒：接管期间 live 文件会临时指向代理，编辑 Provider 时看到的是数据库里的配置，不是 live 文件。这说明状态被拆成 DB、backup、live config、proxy runtime 几层，复杂性还在。</span></li>
         </ul>
         <p>后来我意识到，自动故障转移本身就是一个会写状态的机制。它不是单纯地“观察哪个 Provider 可用”，而是会更新当前 Provider、失败计数、路由状态，甚至在某些路径下影响 Codex 的 live 配置。所以问题不是要禁止它写，而是要规定它只能写自己该写的那一层。而且每个人都应该负责自己该做的那一层，就比如对我这个问题来说：</p>
         <ul>
-          <li>Codex App：保持 ChatGPT 登录态  <br><code>~/.codex/auth.json</code> 应该是 <code>auth_mode=&quot;chatgpt&quot;</code>，不能有 <code>OPENAI_API_KEY</code></li>
-        </ul>
-        <ul>
-          <li>Codex 配置：永远只指向本地代理  <br><code>~/.codex/config.toml</code> 里应该是 <code>base_url=&quot;http://127.0.0.1:15721/v1&quot;</code></li>
-        </ul>
-        <ul>
-          <li>CC Switch：只负责本地代理和 Provider failover  <br>failover 可以开，但它不应该把 Codex 改成直连 Provider</li>
-        </ul>
-        <ul>
-          <li>Codex++：保持 official login + mixed API  <br>也就是官方登录态保留，API 能力通过本地代理混入</li>
-        </ul>
-        <ul>
-          <li>守卫：只保护边界，不接管业务  <br>它只该修 <code>preserveCodexOfficialAuthOnSwitch=true</code> 这类关键漂移，不应该乱改 provider 队列</li>
+          <li>Codex App：保持 ChatGPT 登录态 <span class="list-detail"><code>~/.codex/auth.json</code> 应该是 <code>auth_mode=&quot;chatgpt&quot;</code>，不能有 <code>OPENAI_API_KEY</code></span></li>
+          <li>Codex 配置：永远只指向本地代理 <span class="list-detail"><code>~/.codex/config.toml</code> 里应该是 <code>base_url=&quot;http://127.0.0.1:15721/v1&quot;</code></span></li>
+          <li>CC Switch：只负责本地代理和 Provider failover <span class="list-detail">failover 可以开，但它不应该把 Codex 改成直连 Provider</span></li>
+          <li>Codex++：保持 official login + mixed API <span class="list-detail">也就是官方登录态保留，API 能力通过本地代理混入</span></li>
+          <li>守卫：只保护边界，不接管业务 <span class="list-detail">它只该修 <code>preserveCodexOfficialAuthOnSwitch=true</code> 这类关键漂移，不应该乱改 provider 队列</span></li>
         </ul>
         <p>而且每次升级相关工具的时候，都要做验收方便回滚。</p>
         <p>以上这一切就是为了维护这一套状态，需要付出的“代价”。我这只是几个小小的工具耦合都这么麻烦，真实上线的、复杂度稍微上一点的系统都会有各种各样的问题出现，更不要说很多问题都是系统越来越复杂之后才可以发现的、积重难返的问题，很多坑在前期压根看不到。我甚至不敢想，在 AI 时代，越来越多系统将混入由 AI 生成的大量“屎山代码”。到那时，人和 AI 究竟谁还能真正掌控系统的走向？</p>
